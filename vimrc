@@ -3,7 +3,7 @@ set nocompatible
 filetype off
 
 " remove trailing whitespace
-autocmd FileType javascript,js,html,python,scala autocmd BufWritePre <buffer> %s/\s\+$//e
+autocmd FileType javascript,js,typescript,ts,html,python,scala autocmd BufWritePre <buffer> %s/\s\+$//e
 noremap <C-m> :%s/\s\+$//e<CR>
 
 " Custom Key mappings
@@ -11,11 +11,16 @@ set encoding=UTF-8
 noremap <S-l> gt
 noremap <S-h> gT
 autocmd FileType javascript set tabstop=2|set shiftwidth=2|set expandtab
+autocmd FileType typescript set tabstop=2|set shiftwidth=2|set expandtab
+autocmd FileType scss set tabstop=2|set shiftwidth=2|set expandtab
+autocmd FileType css set tabstop=2|set shiftwidth=2|set expandtab
 set pastetoggle=<F3>
 
 " resize vertical 
 nnoremap <C-r> :vertical resize 
 
+" format json
+noremap <C-j> :%!python -m json.tool<CR>
 
 " PLUGIN SETTINGS
 " set the runtime path to include Vundle and initialize
@@ -61,6 +66,21 @@ Plugin 'jiangmiao/auto-pairs'
 " Linting
 Plugin 'w0rp/ale'
 
+" css coloring
+Plugin 'ap/vim-css-color'
+
+"Paste Easy
+Plugin 'roxma/vim-paste-easy'
+
+"View Markdown
+Plugin 'shime/vim-livedown'
+
+"Typescript
+Plugin 'leafgarland/typescript-vim'
+
+"Snippets
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -77,8 +97,8 @@ set expandtab
 " SYNTAX HIGHLIGHTING
 " --------------------
 syntax on
-set background=light
-let g:solarized_termcolors=256
+set background=dark
+let g:solarized_use16 = 1
 colorscheme solarized
 
 
@@ -127,9 +147,35 @@ let b:vcm_tab_complete = 1
 " Linting
 let g:ale_fixers = {
 \   'javascript': ['prettier-eslint'],
+\   'typescript': ['tslint'],
 \   'css': ['csslint'],
 \   'scss': ['prettier'],
 \   'python': ['autopep8'],
 \}
 let g:ale_fix_on_save = 1
+let g:ale_completion_tsserver_autoimport = 1
+let g:ale_python_flake8_options = '--ignore=E501' 
+
+" Markdown config
+" should markdown preview get shown automatically upon opening markdown buffer
+let g:livedown_autorun = 0
+
+" should the browser window pop-up upon previewing
+let g:livedown_open = 1 
+
+" the port on which Livedown server will run
+let g:livedown_port = 1337
+
+" the browser to use
+let g:livedown_browser = "safari"
+
+nmap gm :LivedownToggle<CR>
+
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<c-e>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
 
